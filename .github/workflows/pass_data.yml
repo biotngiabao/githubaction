@@ -1,0 +1,20 @@
+name: Passdata
+
+on: [push]
+
+jobs:
+    producer:
+        runs-on: ubuntu-24.0
+        steps:
+            -   name: pass_data
+                run: echo "name=Bao" >> "$GITHUB_OUT"
+            
+        
+    job2:
+        runs-on: ubuntu-24.04
+        env:
+            JOB_VAR: job_var
+        steps:
+            -   name: inspect scope 2
+                run: echo "workflow_var $WORKFLOW_VAR, job_var $JOB_VAR, step_var $STEP_VAR"
+    

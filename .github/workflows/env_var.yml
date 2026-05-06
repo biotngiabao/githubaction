@@ -22,6 +22,6 @@ jobs:
         env:
             JOB_VAR: job_var
         steps:
-            -   name: inspect scope 1
+            -   name: inspect scope 2
                 run: echo "workflow_var $WORKFLOW_VAR, job_var $JOB_VAR, step_var $STEP_VAR"
     
