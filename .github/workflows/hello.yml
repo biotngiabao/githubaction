@@ -3,11 +3,21 @@ name: Hello workflow
 on: [push]
 
 jobs:
-  say_hello: 
-    runs-on: ubuntu-latest
+    say_hello_bash:
+        runs-on: ubuntu-24.04
+        steps:
+            -   run: echo "Hello world from bash script"
+        
+    say_hello_python:
+        runs-on: ubuntu-24.04
+        steps:
+            -   run: print("Hello world from python script")
+                shell: python
+    
+    say_hello_action:
+        runs-on: ubuntu-24.04
+        steps:
+            -   uses: actions/hello-world-javascript-action@main       
+                with:
+                    who-to-greet: "world in Github Action"    
 
-    steps:
-      - name: greet the user
-        run: echo "Hello user"
-      - name: print the branch name
-        run: echo "Push to branch ${{github.ref}}"
