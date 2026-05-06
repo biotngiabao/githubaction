@@ -1,0 +1,27 @@
+name: Enviroments
+
+on: [push]
+
+env:
+    WORKFLOW_VAR: workflow_var
+
+jobs:
+    job1:
+        runs-on: ubuntu-24.04
+        env:
+            JOB_VAR: job_var
+        steps:
+            -   name: inspect scope 1
+                env:
+                    STEP_VAR: step_var1
+                run: echo "workflow_var $WORKFLOW_VAR, job_var $JOB_VAR, step_var $STEP_VAR"
+            
+        
+    job2:
+        runs-on: ubuntu-24.04
+        env:
+            JOB_VAR: job_var
+        steps:
+            -   name: inspect scope 1
+                run: echo "workflow_var $WORKFLOW_VAR, job_var $JOB_VAR, step_var $STEP_VAR"
+    
