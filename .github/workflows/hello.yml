@@ -1,0 +1,13 @@
+name: Hello workflow
+
+on: [push]
+
+jobs:
+  say_hello: 
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: greet the user
+        run: echo "Hello user"
+      - name: print the branch name
+        run: echo "Push to branch ${{github.ref}}"
