@@ -9,9 +9,9 @@ COPY tests/ ./tests
 
 
 RUN python -m grpc_tools.protoc \
-    -I. \
-    --python_out=. \
-    --grpc_python_out=. \
-    calculator.proto
+    -I src \
+    --python_out=src \
+    --grpc_python_out=src \
+    src/calculator.proto
 
 CMD [ "python", "src/server.py" ]
