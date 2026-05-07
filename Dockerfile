@@ -4,8 +4,8 @@ WORKDIR /code
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY src/ .
-COPY tests/ ./tests
+COPY src/ /code
+COPY tests/ /tests
 
 
 RUN python -m grpc_tools.protoc \

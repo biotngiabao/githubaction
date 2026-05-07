@@ -67,7 +67,7 @@ jobs:
             -   name: Run integration tests
                 run: |
                     docker exec $CONTAINER_NAME bash -lc '
-                        cd /code &&
+                        cd / &&
                         python -m pytest -q tests
                     '
                         
