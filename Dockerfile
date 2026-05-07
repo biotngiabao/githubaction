@@ -1,11 +1,11 @@
 FROM python:3.13-slim
 
-WORKDIR /src
+WORKDIR /code
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY src/ /src
-COPY tests/ /tests
+COPY src/ ./src
+COPY tests/ ./tests
 
 
 RUN python -m grpc_tools.protoc \
@@ -14,4 +14,4 @@ RUN python -m grpc_tools.protoc \
     --grpc_python_out=. \
     calculator.proto
 
-CMD [ "python", "server.py" ]
+CMD [ "python", "src/server.py" ]

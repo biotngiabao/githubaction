@@ -11,28 +11,11 @@ from grpc_tools import protoc
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 SRC_DIR = ROOT_DIR / "src"
-PROTO_FILE = SRC_DIR / "calculator.proto"
 
 sys.path.insert(0, str(SRC_DIR))
 
 
-def _generate_grpc_code() -> None:
-    result = protoc.main(
-        [
-            "grpc_tools.protoc",
-            f"-I{SRC_DIR}",
-            f"--python_out={SRC_DIR}",
-            f"--grpc_python_out={SRC_DIR}",
-            str(PROTO_FILE),
-        ]
-    )
-    if result != 0:
-        raise RuntimeError("Failed to generate calculator gRPC Python code")
-
-
-_generate_grpc_code()
-
-import calculator_pb2_grpc  # noqa: E402
+from src import calculator_pb2_grpc 
 from server import CalculatorService  # noqa: E402
 
 
