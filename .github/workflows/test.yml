@@ -5,30 +5,69 @@ on:
     pull_request:
     workflow_dispatch:
 
+env:
+    IMAGE_NAME: calc_gprc:latest
+    CONTAINER_NAME: calc_gprc
+    GRPC_PORT: 50051
+    
 jobs:
     grpc-integration-test:
         runs-on: self-hosted
         steps:
-            -   name: Checkout repo
+            -   name: Checkout repository
                 uses: actions/checkout@v4
-
-            -   name: Set up Python
-                uses: actions/setup-python@v5
-                with: 
-                    python-version: "3.13"
-                    cache: pip
             
-            -   name: Install deps
-                run: python -m pip install -r requirements.txt
-            
-            -   name: Generate gRPC Python code
+            -   name: Show runner info
                 run: |
-                    echo "Hello" &&
-                    python -m grpc_tools.protoc \
-                    -I src \
-                    --python_out=src \
-                    --grpc_python_out=src \
-                    src/calculator.proto
+                    whoami
+                    hostname
+                    pwd
+                    docker --version
             
+            -   name: Build Docker image
+                run: docker build -t "$IMAGE_NAME" .
+            
+
+            -   name: Remove the old container
+                run: docker rm -f "$CONTAINER_NAME" || true
+            
+            -   name: Start gRPC server container
+                run: docker run -d --name "$CONTAINER_NAME" -p "$GRPC_PORT:$GRPC_PORT" "$IMAGE_NAME"
+
+            -   name: Wait for gRPC server
+                run: |
+                    for i in {1..30}; do
+                        python3 - <<'PY'
+                    import socket
+                    s = socket.socket()
+                    s.settimeout(1)
+                    try:
+                        s.connect(("127.0.0.1", 50051))
+                        s.close()
+                        raise SystemExit(0)
+                    except Exception:
+                        raise SystemExit(1)
+                    PY
+
+                    if [ $? -eq 0 ]; then
+                        echo "gRPC server is ready"
+                        exit 0
+                        fi
+
+                        echo "Waiting for gRPC server..."
+                        docker logs "$CONTAINER_NAME" || true
+                        sleep 1
+                    done
+
+                    echo "gRPC server did not become ready"
+                    docker logs "$CONTAINER_NAME" || true
+                    exit 1
+
+           
             -   name: Run integration tests
-                run: python -m pytest -q
+                run: |
+                    docker exec $CONTAINWE_NAME bash -lc '
+                        cd /code &&
+                        python -m pytest -q tests
+                    '
+                        
