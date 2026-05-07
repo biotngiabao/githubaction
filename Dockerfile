@@ -4,8 +4,8 @@ WORKDIR /code
 COPY requirements.txt requirements.txt 
 RUN pip install -r requirements.txt
 
-COPY /src /code
-COPY /tests /tests
+COPY /src .
+COPY /tests ./tests
 
 
 RUN python -m grpc_tools.protoc \
