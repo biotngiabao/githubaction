@@ -7,7 +7,7 @@ on:
 
 jobs:
     grpc-integration-test:
-        runs-on: ubuntu-24.04
+        runs-on: self-hosted
         steps:
             -   name: Checkout repo
                 uses: actions/checkout@v4
